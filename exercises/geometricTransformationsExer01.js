@@ -39,7 +39,7 @@ showInformation();
 var keyboard = new KeyboardState();
 
 // Show axes (parameter is size of each axis)
-var axesHelper = new THREE.AxesHelper(12);
+let axesHelper = new THREE.AxesHelper(12);
 scene.add(axesHelper);
 
 // create the ground plane
@@ -47,12 +47,29 @@ let plane = createGroundPlaneXZ(20, 20);
 scene.add(plane);
 
 // create a cube
-var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
-var cube = new THREE.Mesh(cubeGeometry, material);
+let cubeGeometry = new THREE.BoxGeometry(11, 0.3, 6);
+let cube = new THREE.Mesh(cubeGeometry, material);
 // position the cube
-cube.position.set(0.0, 2.0, 0.0);
+cube.position.set(0.0, 3.0, 0.0);
 // add the cube to the scene
 scene.add(cube);
+
+let cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3, 32);
+
+// Positions for each leg of the table
+const legPositions = [
+  new THREE.Vector3(-5, -1.5, -2.5),
+  new THREE.Vector3(5, -1.5, -2.5),
+  new THREE.Vector3(5, -1.5, 2.5),
+  new THREE.Vector3(-5, -1.5, 2.5),
+];
+
+// Create the table legs
+for (let i = 0; i < 4; i++) {
+  let cylinder = new THREE.Mesh(cylinderGeometry, material);
+  cylinder.position.copy(legPositions[i]);
+  cube.add(cylinder);
+}
 
 var cubeAxesHelper = new THREE.AxesHelper(9);
 cube.add(cubeAxesHelper);
@@ -83,6 +100,7 @@ function keyboardUpdate() {
     scale -= 0.1;
     cube.scale.set(scale, scale, scale);
   }
+  if (keyboard.pressed("space")) cube.position.set(0.0, 3.0, 0.0);
   updatePositionMessage();
 }
 
@@ -117,10 +135,15 @@ function showInformation() {
   var controls = new InfoBox();
   controls.add("Geometric Transformation");
   controls.addParagraph();
+  controls.add("Use mouse to interact:");
+  controls.add("* Left button to rotate");
+  controls.add("* Right button to translate (pan)");
+  controls.add("* Scroll to zoom in/out.");
   controls.add("Use keyboard arrows to move the cube in XY.");
   controls.add("Press Page Up or Page down to move the cube over the Z axis");
   controls.add("Press 'A' and 'D' to rotate.");
   controls.add("Press 'W' and 'S' to change scale");
+  controls.add("Press SPACE to put the cube in its original position");
   controls.show();
 }
 
