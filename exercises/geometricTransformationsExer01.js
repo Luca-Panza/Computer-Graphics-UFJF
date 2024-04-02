@@ -139,6 +139,7 @@ function showInformation() {
   controls.add("* Left button to rotate");
   controls.add("* Right button to translate (pan)");
   controls.add("* Scroll to zoom in/out.");
+  controls.addParagraph();
   controls.add("Use keyboard arrows to move the cube in XY.");
   controls.add("Press Page Up or Page down to move the cube over the Z axis");
   controls.add("Press 'A' and 'D' to rotate.");
