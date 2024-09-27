@@ -28,7 +28,6 @@ var list = {
 				"Manual Creation": "html/geometriesManualInfo",				
 				"Basic": "html/geometriesBasicInfo",
 				"Lathe": "html/geometriesLatheInfo",
-				"Extrusion": "html/geometriesExtrusionInfo",
 				"Convex": "html/geometriesConvexInfo",
             "CSG": "html/geometryCSGInfo",
 				"Loading External Files": "html/geometriesExternalObjectsInfo",
@@ -55,10 +54,10 @@ var list = {
             "Traversing": "html/textureExtraTraversingInfo",            
 			},         
 			"Realism":  {
-				"Ray Tracing 1": "html/raytracingExample1Info",
-				"Ray Tracing 2": "html/raytracingExample2Info",
-				"Path Tracing 1": "html/pathTracingExample1Info",            
-				"Path Tracing 2": "html/pathTracingExample2Info",                        
+				"Ray Tracing 1 (CPU)": "html/raytracingExample1Info",
+				"Ray Tracing 2 (CPU)": "html/raytracingExample2Info",
+            "Ray Tracing  (GLSL)": "html/rayTracingGLSLExampleInfo",
+				"Path Tracing (GLSL)": "html/pathTracingExampleInfo",            
 			},			
 		},
 		"XR": {

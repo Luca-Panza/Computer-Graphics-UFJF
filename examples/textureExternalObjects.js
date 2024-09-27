@@ -5,7 +5,7 @@ import {GLTFLoader} from '../build/jsm/loaders/GLTFLoader.js';
 import {OBJLoader} from '../build/jsm/loaders/OBJLoader.js';
 import {MTLLoader} from '../build/jsm/loaders/MTLLoader.js';
 import {initRenderer, 
-        initDefaultSpotlight,
+        initDefaultBasicLight,
         createGroundPlane,
         SecondaryBox,
         getMaxSize,        
@@ -14,9 +14,8 @@ import {initRenderer,
 
 let scene, renderer, camera, orbit, light;
 scene = new THREE.Scene();    // Create main scene
-light = initDefaultSpotlight(scene, new THREE.Vector3(2, 3, 2)); // Use default light
-renderer = initRenderer();    // View function in util/utils
-   renderer.setClearColor("rgb(30, 30, 42)");
+renderer = initRenderer("rgb(30, 30, 42)", THREE.VSMShadowMap);    
+light = initDefaultBasicLight(scene, true, new THREE.Vector3(2, 3, 2), 8, 1024); // Use default light
 camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
    camera.position.set(2.18, 1.62, 3.31);
    camera.up.set( 0, 1, 0 );
@@ -30,7 +29,6 @@ scene.add(lightSphere);
 
 // Listen window size changes
 window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false );
-
 let loadingMessage = new SecondaryBox("Loading...");
 
 var groundPlane = createGroundPlane(6.0, 6.0, 80, 80); // width and height
@@ -53,14 +51,14 @@ let assetManager = {
    tank: null,
    orca: null,
    woodenGoose: null,
-   chair: null,
+   statue: null,
    allLoaded: false,
 
    // Functions ----------------------------------
    checkLoaded : function() {
       if(!this.allLoaded)
       {
-         if(this.L200 && this.chair && this.orca &&
+         if(this.L200 && this.statue && this.orca &&
             this.plane && this.tank && this.woodenGoose){
              this.allLoaded = true;
              loadingMessage.hide(); 
@@ -69,7 +67,7 @@ let assetManager = {
    },   
 
    hideAll : function() {
-      this.orca.visible = this.woodenGoose.visible = this.chair.visible = 
+      this.orca.visible = this.woodenGoose.visible = this.statue.visible = 
       this.plane.visible = this.L200.visible = this.tank.visible = false;
    }
 }
@@ -78,9 +76,9 @@ loadOBJFile('../assets/objects/', 'plane', 3.5, 0, true);
 loadOBJFile('../assets/objects/', 'L200', 2.5, 90, false);
 loadOBJFile('../assets/objects/', 'tank', 2.0, 90, false);
 
-loadGLTFFile('../assets/objects/', 'orca', 4.0, 180, false);
-loadGLTFFile('../assets/objects/', 'woodenGoose', 2.0, 90, false);
-loadGLTFFile('../assets/objects/','chair', 1.5, 180, false);
+loadGLBFile('../assets/objects/', 'orca', 4.0, 180, false);
+loadGLBFile('../assets/objects/', 'woodenGoose', 2.0, 90, false);
+loadGLBFile('../assets/objects/', 'statue', 2.0, 0, false);
 
 buildInterface();
 render();
@@ -115,7 +113,7 @@ function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility)
   });
 }
 
-function loadGLTFFile(modelPath, modelName, desiredScale, angle, visibility)
+function loadGLBFile(modelPath, modelName, desiredScale, angle, visibility)
 {
    var loader = new GLTFLoader( );
    loader.load( modelPath + modelName + '.glb', function ( gltf ) {
@@ -187,7 +185,7 @@ function buildInterface()
   // GUI interface
   var gui = new GUI();
   gui.add(controls, 'type',
-  ['plane', 'orca', 'woodenGoose', 'chair', 'L200', 'tank'])
+  ['plane', 'orca', 'woodenGoose', 'L200', 'tank', 'statue'])
      .name("Change Object")
      .onChange(function(e) { controls.onChooseObject(); });
   gui.add(controls, 'viewAxes', false)
@@ -201,3 +199,5 @@ function render()
    requestAnimationFrame(render);
    renderer.render(scene, camera)
 }
+
+
